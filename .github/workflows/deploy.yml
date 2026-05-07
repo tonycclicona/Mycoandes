@@ -1,10 +1,8 @@
 name: Deploy to Hostinger
-
 on:
   push:
     branches:
       - main # Ejecuta el script cada vez que haya un "push" a la rama main
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -23,7 +21,6 @@ jobs:
 
       - name: 🏗️ Construir la versión de producción (Vite Build)
         run: npm run build
-
       - name: 🚀 Desplegar a Hostinger vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
