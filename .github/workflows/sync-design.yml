@@ -3,7 +3,7 @@ name: Sincronizar Diseño de Figma a Producción
 on:
   push:
     branches:
-      - figma-updates # La rama donde Figma ahora "escupe" el código
+      - figma_updates # La rama donde Figma ahora "escupe" el código
 
 jobs:
   merge-design:
@@ -24,4 +24,4 @@ jobs:
           git checkout main -- .github/workflows/ # Fuerza a mantener el deploy.yml
           git add .
           git commit -m "Actualización visual desde Figma (Sincronización Automática)" || echo "No hay cambios"
-          git push origin main
+          git push origin figma_updates
