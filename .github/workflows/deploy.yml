@@ -26,7 +26,7 @@ jobs:
         with:
           server: 147.93.39.40       # Tu IP directa según Hostinger
           username: u251936581       # Tu usuario directo según Hostinger
-          password: ${{ secrets.FTP_PASSWORD }}
+          password: B34rded,ftp
           port: 21                   # Especificado en tu imagen
           protocol: ftp              # Especificado en tu imagen
           local-dir: ./dist/ 
