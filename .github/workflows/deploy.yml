@@ -24,10 +24,10 @@ jobs:
       - name: 🚀 Desplegar a Hostinger vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: 147.93.39.40
+          protocol: ftp
+          host: 147.93.39.40
+          port: 21
           username: u251936581
           password: B34rded.ftp
-          port: 21
-          protocol: ftp
           local-dir: ./dist/
           server-dir: ./public_html/
