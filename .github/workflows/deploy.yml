@@ -21,6 +21,7 @@ jobs:
 
       - name: 🏗️ Construir la versión de producción (Vite Build)
         run: npm run build
+        
       - name: 🚀 Desplegar a Hostinger vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
