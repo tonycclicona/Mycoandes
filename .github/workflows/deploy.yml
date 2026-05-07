@@ -31,4 +31,4 @@ jobs:
           username: u251936581.mycoandes
           password: B34rd3d.ftp
           local-dir: ./dist/
-          server-dir: /home/u251936581/domains/beardedmountaineerlodge.com/public_html/
+          server-dir: ./public_html/
