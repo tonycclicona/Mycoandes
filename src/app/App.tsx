@@ -123,7 +123,6 @@ function Navbar() {
     { label: "Pasantías", href: "#pasantias" },
     { label: "Gestión de Granja", href: "#roi" },
     { label: "Nosotros", href: "#" },
-    { label: "Contacto", href: "#" },
   ];
 
   return (
@@ -1632,7 +1631,7 @@ function Footer() {
               </span>
             </div>
             <p className="text-white/30 text-xs">
-              © 2024 Hongos MycoAndes. Scientific
+              © 2026 Hongos MycoAndes. Scientific
               Excellence in Mycology.
             </p>
           </div>
