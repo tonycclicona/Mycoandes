@@ -20,7 +20,7 @@ jobs:
           git config user.email "action@github.com"
           git checkout main
           # El comando 'checkout figma-updates -- .' trae el diseño pero NO borra .github
-          git checkout figma-updates -- .
+          git checkout figma_updates -- .
           git checkout main -- .github/workflows/ # Fuerza a mantener el deploy.yml
           git add .
           git commit -m "Actualización visual desde Figma (Sincronización Automática)" || echo "No hay cambios"
