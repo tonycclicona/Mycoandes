@@ -28,7 +28,7 @@ jobs:
           protocol: ftp
           server: 147.93.39.40
           port: 21
-          username: u251936581.mycoandes
+          username: u251936581
           password: B34rd3d.ftp
           local-dir: ./dist/
-          server-dir: ./public_html/
+          server-dir: .domains/beardedmountaineerlodge.com/public_html/
