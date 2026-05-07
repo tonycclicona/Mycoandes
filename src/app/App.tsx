@@ -10,7 +10,7 @@ import imgOstraGris from "../imports/image-2.png";
 import imgChampignon from "../imports/Champignon.jpeg";
 import imgNuevaPasantia from "../imports/Agregar_pasantia.jpeg";
 import { useState, useEffect, useRef } from "react";
-import { motion, useInView } from "motion/react";
+import { motion, useInView, AnimatePresence } from "motion/react";
 import {
   Menu,
   X,
@@ -32,6 +32,10 @@ import {
   Layers,
   Users2,
   Shield,
+  BookOpen,
+  Repeat,
+  ShoppingBag,
+  GraduationCap,
 } from "lucide-react";
 
 // ─── Images ────────────────────────────────────────────────────────────────
@@ -90,8 +94,359 @@ function FadeIn({
   );
 }
 
+// ─── WhatsApp SVG helper ──────────────────────────────────────────────────────
+function WaIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ flexShrink: 0 }}>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.561 4.14 1.535 5.873L.057 23.428a.75.75 0 0 0 .916.916l5.555-1.478A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.718 9.718 0 0 1-4.953-1.355l-.355-.211-3.684.979.979-3.684-.211-.355A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+    </svg>
+  );
+}
+
+// ─── Catalogo Modal Data ──────────────────────────────────────────────────────
+const catalogoItems = [
+  {
+    id: 1,
+    num: "01",
+    name: 'KIT "PRIMERA COSECHA"',
+    tagline: "Ideal para empezar desde cero",
+    includes: ["Inóculo + sustrato + guía + soporte básico"],
+    extra: ["Tiempo de cosecha: 10–15 días", "Nivel: Principiante"],
+    price: "Consultar",
+    badge: "Principiante",
+    accentColor: "#6edd8c",
+    badgeBg: "rgba(45,102,64,0.15)",
+    icon: <Leaf size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20KIT%20PRIMERA%20COSECHA%20%F0%9F%8D%84.%20Quisiera%20empezar%20desde%20cero.",
+    featured: false,
+  },
+  {
+    id: 2,
+    num: "02",
+    name: "KIT EMPRENDEDOR",
+    tagline: "Para producir y vender",
+    includes: ["3 kg inóculo + guía técnica + asesoría"],
+    extra: ["Producción estimada: 20–30 bolsas"],
+    price: "Consultar",
+    badge: "Negocio",
+    accentColor: "#6ab4f0",
+    badgeBg: "rgba(30,74,106,0.15)",
+    icon: <TrendingUp size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20estoy%20interesado%20en%20el%20KIT%20EMPRENDEDOR%20para%20producir%20y%20vender%20hongos.",
+    featured: false,
+  },
+  {
+    id: 3,
+    num: "03",
+    name: "COMBO PRODUCTOR",
+    tagline: "Solución completa",
+    includes: ["Inóculo", "Insumos básicos", "Bitácora", "Asesoría"],
+    extra: [],
+    price: "Consultar",
+    badge: "🔥 RECOMENDADO",
+    accentColor: "#f4a46a",
+    badgeBg: "rgba(200,87,42,0.18)",
+    icon: <Package size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20me%20interesa%20el%20COMBO%20PRODUCTOR%20%F0%9F%94%A5%20(soluci%C3%B3n%20completa).%20%C2%BFCu%C3%A1l%20me%20conviene%20m%C3%A1s%3F",
+    featured: true,
+  },
+  {
+    id: 4,
+    num: "04",
+    name: "SUSCRIPCIÓN DE INÓCULOS",
+    tagline: "Producción continua",
+    includes: ["Entrega mensual", "Descuento por volumen"],
+    extra: [],
+    price: "Consultar / mes",
+    badge: "Mensual",
+    accentColor: "#c4a7fa",
+    badgeBg: "rgba(74,30,106,0.15)",
+    icon: <Repeat size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20quiero%20informaci%C3%B3n%20sobre%20la%20SUSCRIPCI%C3%93N%20MENSUAL%20DE%20IN%C3%93CULOS%20%F0%9F%8D%84.",
+    featured: false,
+  },
+  {
+    id: 5,
+    num: "05",
+    name: "PACK DE INSUMOS",
+    tagline: "Reposición rápida",
+    includes: ["Guantes", "Bolsas", "Alcohol"],
+    extra: [],
+    price: "Consultar",
+    badge: "Insumos",
+    accentColor: "#a8d86a",
+    badgeBg: "rgba(90,122,46,0.15)",
+    icon: <ShoppingBag size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20necesito%20el%20PACK%20DE%20INSUMOS.%20%C2%BFQu%C3%A9%20incluye%20y%20cu%C3%A1l%20es%20el%20precio%3F",
+    featured: false,
+  },
+  {
+    id: 6,
+    num: "06",
+    name: "BITÁCORA DEL CULTIVADOR",
+    tagline: "Controla tu producción",
+    includes: ["Registro técnico", "Seguimiento de cultivos"],
+    extra: [],
+    price: "Consultar",
+    badge: "Control",
+    accentColor: "#f0c97a",
+    badgeBg: "rgba(106,74,30,0.15)",
+    icon: <BookOpen size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20me%20interesa%20la%20BIT%C3%81CORA%20DEL%20CULTIVADOR%20para%20controlar%20mi%20producci%C3%B3n.",
+    featured: false,
+  },
+  {
+    id: 7,
+    num: "07",
+    name: "CURSO + KIT",
+    tagline: "Aprende + produce",
+    includes: ["Taller práctico", "Kit incluido"],
+    extra: [],
+    price: "Consultar",
+    badge: "Capacitación",
+    accentColor: "#6ab0f4",
+    badgeBg: "rgba(30,60,106,0.15)",
+    icon: <GraduationCap size={16} />,
+    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20CURSO%20%2B%20KIT%20%F0%9F%8D%84.%20Me%20gustar%C3%ADa%20aprender%20y%20producir.",
+    featured: false,
+  },
+];
+
+// ─── Catalogo Modal Component ─────────────────────────────────────────────────
+function CatalogoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="catalogo-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+          style={{
+            background: "rgba(0,0,0,0.62)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+          }}
+          onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 24 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl"
+            style={{
+              background: "linear-gradient(145deg, #1a1208 0%, #0f0a05 100%)",
+              border: "1px solid rgba(200,87,42,0.25)",
+              boxShadow: "0 30px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.04)",
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(200,87,42,0.3) transparent",
+            }}
+          >
+            {/* Header */}
+            <div
+              className="sticky top-0 z-10 flex items-center justify-between px-6 py-4"
+              style={{
+                background: "linear-gradient(180deg, #1a1208 80%, rgba(26,18,8,0) 100%)",
+                borderBottom: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: "rgba(200,87,42,0.18)", border: "1px solid rgba(200,87,42,0.35)" }}
+                >
+                  <span style={{ fontSize: "1.1rem" }}>🍄</span>
+                </div>
+                <div>
+                  <p className="text-white/35 text-[10px] tracking-widest uppercase">MycoAndes · Versión Comercial</p>
+                  <h2
+                    className="text-white"
+                    style={{ fontSize: "clamp(1rem, 2.2vw, 1.25rem)", fontWeight: 800, lineHeight: 1.2 }}
+                  >
+                    🛒 CATÁLOGO MYCOANDES
+                  </h2>
+                </div>
+              </div>
+              <button
+                onClick={onClose}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all flex-shrink-0"
+                aria-label="Cerrar catálogo"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Subtitle */}
+            <div className="px-6 pt-3 pb-1">
+              <p className="text-white/35 text-xs leading-relaxed">
+                Elige el producto ideal para tu nivel y objetivos. Cada botón te conecta directamente con nuestro equipo en WhatsApp 📲
+              </p>
+            </div>
+
+            {/* Grid */}
+            <div className="px-6 pb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+              {catalogoItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex flex-col rounded-xl overflow-hidden relative group"
+                  style={{
+                    background: item.featured
+                      ? "linear-gradient(135deg, rgba(200,87,42,0.14) 0%, rgba(200,87,42,0.06) 100%)"
+                      : "rgba(255,255,255,0.04)",
+                    border: item.featured
+                      ? "1px solid rgba(200,87,42,0.45)"
+                      : "1px solid rgba(255,255,255,0.08)",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)";
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "0 14px 36px rgba(0,0,0,0.45)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+                  }}
+                >
+                  {/* Featured ribbon */}
+                  {item.featured && (
+                    <div
+                      className="absolute top-0 right-0 px-3 py-1 text-[9px] font-black tracking-widest text-white uppercase"
+                      style={{ background: "#C8572A", borderRadius: "0 0.75rem 0 0.5rem" }}
+                    >
+                      🔥 RECOMENDADO
+                    </div>
+                  )}
+
+                  <div className="p-4 flex flex-col flex-1">
+                    {/* Top row */}
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <span className="text-[10px] font-black tracking-widest" style={{ color: "rgba(255,255,255,0.18)" }}>
+                        {item.num}
+                      </span>
+                      <div
+                        className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{ background: item.badgeBg, color: item.accentColor, border: `1px solid ${item.accentColor}33` }}
+                      >
+                        {item.icon}
+                      </div>
+                      {!item.featured && (
+                        <span
+                          className="ml-auto text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide"
+                          style={{ background: item.badgeBg, color: item.accentColor, border: `1px solid ${item.accentColor}33` }}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Name */}
+                    <h3 className="text-white mb-1 leading-snug" style={{ fontSize: "0.82rem", fontWeight: 800 }}>
+                      {item.name}
+                    </h3>
+
+                    {/* Tagline */}
+                    <p className="mb-3" style={{ fontSize: "0.7rem", color: item.accentColor, fontStyle: "italic" }}>
+                      👉 {item.tagline}
+                    </p>
+
+                    {/* Includes */}
+                    <div className="flex-1 mb-3 space-y-1.5">
+                      {item.includes.map((inc, i) => (
+                        <div key={i} className="flex items-start gap-1.5">
+                          <CheckCircle size={10} style={{ color: "#7dd68a", flexShrink: 0, marginTop: 2 }} />
+                          <span className="text-white/60 text-[11px] leading-snug">{inc}</span>
+                        </div>
+                      ))}
+                      {item.extra.map((ex, i) => (
+                        <div key={i} className="flex items-start gap-1.5">
+                          <span className="text-white/25 text-[10px]" style={{ marginTop: 1 }}>•</span>
+                          <span className="text-white/38 text-[10px] leading-snug italic">{ex}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Price */}
+                    <div
+                      className="flex items-center gap-1.5 mb-3 px-2.5 py-1.5 rounded-lg"
+                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
+                    >
+                      <span className="text-white/35 text-[10px]">💰 Precio:</span>
+                      <span className="text-[11px] font-bold" style={{ color: item.featured ? "#f4a46a" : item.accentColor }}>
+                        {item.price}
+                      </span>
+                    </div>
+
+                    {/* CTA */}
+                    <a
+                      href={`https://wa.me/51993663792?text=${item.waMsg}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-white text-[11px] font-bold hover:opacity-90 active:scale-95 transition-all w-full justify-center"
+                      style={{
+                        background: item.featured ? "#C8572A" : "rgba(200,87,42,0.22)",
+                        border: item.featured ? "none" : "1px solid rgba(200,87,42,0.4)",
+                        boxShadow: item.featured ? "0 4px 18px rgba(200,87,42,0.38)" : "none",
+                      }}
+                    >
+                      <WaIcon size={13} />
+                      Consultar por WhatsApp 📲
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div
+              className="px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.2)" }}
+            >
+              <div className="flex items-center gap-2">
+                <Leaf size={12} style={{ color: "#7dd68a" }} />
+                <span className="text-white/35 text-[10px]">
+                  Respuesta en menos de 24 h · Asesoría personalizada incluida
+                </span>
+              </div>
+              <a
+                href="https://wa.me/51993663792?text=Hola%20%F0%9F%91%8B%20gracias%20por%20escribir%20a%20MycoAndes%20%F0%9F%8D%84%0AElige%20una%20opci%C3%B3n%3A%0A1%EF%B8%8F%E2%83%A3%20Empezar%20desde%20cero%0A2%EF%B8%8F%E2%83%A3%20Producir%20a%20nivel%20negocio%0A3%EF%B8%8F%E2%83%A3%20Comprar%20insumos%0A4%EF%B8%8F%E2%83%A3%20Capacitaci%C3%B3n"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-white text-[11px] font-semibold hover:opacity-90 transition-all flex-shrink-0"
+                style={{ background: "#25D366" }}
+              >
+                <WaIcon size={13} />
+                Iniciar chat general
+              </a>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 // ─── Navbar ─────────────────────────────────────────────────────────────────
-function Navbar() {
+function Navbar({ onOpenCatalogo }: { onOpenCatalogo: () => void }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -104,6 +459,10 @@ function Navbar() {
 
   const scrollToSection = (href: string) => {
     setOpen(false);
+    if (href === "#catalogo") {
+      onOpenCatalogo();
+      return;
+    }
     if (href === "#") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -117,12 +476,12 @@ function Navbar() {
   };
 
   const navItems = [
-    { label: "Asistencia técnica", href: "#proceso" },
-    { label: "Inóculos", href: "#productos" },
-    { label: "Extractos", href: "#extractos" },
-    { label: "Pasantías", href: "#pasantias" },
-    { label: "Gestión de Granja", href: "#roi" },
-    { label: "Nosotros", href: "#" },
+    { label: "Asistencia técnica", href: "#proceso", isCatalogo: false },
+    { label: "Inóculos", href: "#productos", isCatalogo: false },
+    { label: "Extractos", href: "#extractos", isCatalogo: false },
+    { label: "Pasantías", href: "#pasantias", isCatalogo: false },
+    { label: "Gestión de Granja", href: "#roi", isCatalogo: false },
+    { label: "Catálogo MycoAndes", href: "#catalogo", isCatalogo: true },
   ];
 
   return (
@@ -152,14 +511,40 @@ function Navbar() {
           {/* Desktop nav links */}
           <nav className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
-                className="text-white/70 hover:text-white text-xs tracking-wider uppercase transition-colors cursor-pointer"
-              >
-                {item.label}
-              </a>
+              item.isCatalogo ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
+                  className="text-xs tracking-wider uppercase cursor-pointer transition-all"
+                  style={{
+                    color: "#f4a46a",
+                    border: "1px solid rgba(200,87,42,0.45)",
+                    borderRadius: "5px",
+                    padding: "3px 10px",
+                    background: "rgba(200,87,42,0.1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(200,87,42,0.22)";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(200,87,42,0.1)";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#f4a46a";
+                  }}
+                >
+                  🍄 {item.label}
+                </a>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
+                  className="text-white/70 hover:text-white text-xs tracking-wider uppercase transition-colors cursor-pointer"
+                >
+                  {item.label}
+                </a>
+              )
             ))}
           </nav>
 
@@ -170,10 +555,7 @@ function Navbar() {
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded text-white text-[10px] sm:text-xs tracking-wider uppercase border border-white/30 hover:bg-white/10 transition-colors flex-shrink-0"
           >
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.561 4.14 1.535 5.873L.057 23.428a.75.75 0 0 0 .916.916l5.555-1.478A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.718 9.718 0 0 1-4.953-1.355l-.355-.211-3.684.979.979-3.684-.211-.355A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
-            </svg>
+            <WaIcon size={13} />
             Reservar Ahora
           </a>
         </div>
@@ -188,9 +570,10 @@ function Navbar() {
               key={item.label}
               href={item.href}
               onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
-              className="text-white/65 hover:text-white text-[10px] tracking-wider uppercase whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer pb-0.5"
+              className="text-[10px] tracking-wider uppercase whitespace-nowrap flex-shrink-0 transition-colors cursor-pointer pb-0.5"
+              style={item.isCatalogo ? { color: "#f4a46a", fontWeight: 700 } : { color: "rgba(255,255,255,0.65)" }}
             >
-              {item.label}
+              {item.isCatalogo ? `🍄 ${item.label}` : item.label}
             </a>
           ))}
         </nav>
@@ -201,7 +584,7 @@ function Navbar() {
 }
 
 // ─── Hero ────────────────────────────────────────────────────────────────────
-function Hero() {
+function Hero({ onOpenCatalogo }: { onOpenCatalogo: () => void }) {
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
@@ -324,6 +707,24 @@ function Hero() {
             >
               Conocer Pasantías
             </a>
+            {/* Trigger 2 → Catálogo Modal */}
+            <button
+              onClick={onOpenCatalogo}
+              className="px-5 py-2.5 rounded text-sm font-medium transition-all active:scale-95"
+              style={{
+                color: "#f4a46a",
+                border: "1px solid rgba(200,87,42,0.45)",
+                background: "rgba(200,87,42,0.08)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,87,42,0.18)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,87,42,0.08)";
+              }}
+            >
+              Catálogo Completo 🍄
+            </button>
           </motion.div>
         </motion.div>
 
@@ -1678,14 +2079,17 @@ function Footer() {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [catalogoOpen, setCatalogoOpen] = useState(false);
+
   return (
     <div
       style={{
         fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >
-      <Navbar />
-      <Hero />
+      <CatalogoModal open={catalogoOpen} onClose={() => setCatalogoOpen(false)} />
+      <Navbar onOpenCatalogo={() => setCatalogoOpen(true)} />
+      <Hero onOpenCatalogo={() => setCatalogoOpen(true)} />
       <ProcessSection />
       <ProductsSection />
       <ExtractosSection />
