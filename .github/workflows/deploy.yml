@@ -24,9 +24,10 @@ jobs:
       - name: 🚀 Desplegar a Hostinger vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
+          server: 147.93.39.40       # Tu IP directa según Hostinger
+          username: u251936581       # Tu usuario directo según Hostinger
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/ # Carpeta generada por Vite tras el build
-          server-dir: ./public_html/ # Carpeta de destino en Hostinger
-          danger-action: true # Permite sobrescribir archivos existentes
+          port: 21                   # Especificado en tu imagen
+          protocol: ftp              # Especificado en tu imagen
+          local-dir: ./dist/ 
+          server-dir: ./public_html/
