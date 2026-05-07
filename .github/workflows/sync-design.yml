@@ -1,0 +1,27 @@
+name: Sincronizar Diseño de Figma a Producción
+
+on:
+  push:
+    branches:
+      - figma-updates # La rama donde Figma ahora "escupe" el código
+
+jobs:
+  merge-design:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout de todo el repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔄 Combinar Cambios (Protegiendo flujos)
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git checkout main
+          # El comando 'checkout figma-updates -- .' trae el diseño pero NO borra .github
+          git checkout figma-updates -- .
+          git checkout main -- .github/workflows/ # Fuerza a mantener el deploy.yml
+          git add .
+          git commit -m "Actualización visual desde Figma (Sincronización Automática)" || echo "No hay cambios"
+          git push origin main
