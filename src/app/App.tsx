@@ -139,21 +139,6 @@ const catalogoItems = [
   {
     id: 3,
     num: "03",
-    name: "COMBO PRODUCTOR",
-    tagline: "Solución completa",
-    includes: ["Inóculo", "Insumos básicos", "Bitácora", "Asesoría"],
-    extra: [],
-    price: "Consultar",
-    badge: "🔥 RECOMENDADO",
-    accentColor: "#f4a46a",
-    badgeBg: "rgba(200,87,42,0.18)",
-    icon: <Package size={16} />,
-    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20me%20interesa%20el%20COMBO%20PRODUCTOR%20%F0%9F%94%A5%20(soluci%C3%B3n%20completa).%20%C2%BFCu%C3%A1l%20me%20conviene%20m%C3%A1s%3F",
-    featured: true,
-  },
-  {
-    id: 4,
-    num: "04",
     name: "SUSCRIPCIÓN DE INÓCULOS",
     tagline: "Producción continua",
     includes: ["Entrega mensual", "Descuento por volumen"],
@@ -167,8 +152,8 @@ const catalogoItems = [
     featured: false,
   },
   {
-    id: 5,
-    num: "05",
+    id: 4,
+    num: "04",
     name: "PACK DE INSUMOS",
     tagline: "Reposición rápida",
     includes: ["Guantes", "Bolsas", "Alcohol"],
@@ -182,23 +167,8 @@ const catalogoItems = [
     featured: false,
   },
   {
-    id: 6,
-    num: "06",
-    name: "BITÁCORA DEL CULTIVADOR",
-    tagline: "Controla tu producción",
-    includes: ["Registro técnico", "Seguimiento de cultivos"],
-    extra: [],
-    price: "Consultar",
-    badge: "Control",
-    accentColor: "#f0c97a",
-    badgeBg: "rgba(106,74,30,0.15)",
-    icon: <BookOpen size={16} />,
-    waMsg: "Hola%20%F0%9F%91%8B%20MycoAndes%2C%20me%20interesa%20la%20BIT%C3%81CORA%20DEL%20CULTIVADOR%20para%20controlar%20mi%20producci%C3%B3n.",
-    featured: false,
-  },
-  {
-    id: 7,
-    num: "07",
+    id: 5,
+    num: "05",
     name: "CURSO + KIT",
     tagline: "Aprende + produce",
     includes: ["Taller práctico", "Kit incluido"],
@@ -283,7 +253,7 @@ function CatalogoModal({ open, onClose }: { open: boolean; onClose: () => void }
                     className="text-white"
                     style={{ fontSize: "clamp(1rem, 2.2vw, 1.25rem)", fontWeight: 800, lineHeight: 1.2 }}
                   >
-                    🛒 CATÁLOGO MYCOANDES
+                    🛒 KIT MYCOANDES
                   </h2>
                 </div>
               </div>
@@ -398,7 +368,7 @@ function CatalogoModal({ open, onClose }: { open: boolean; onClose: () => void }
 
                     {/* CTA */}
                     <a
-                      href={`https://wa.me/51993663792?text=${item.waMsg}`}
+                      href={`https://wa.me/51900246403?text=${item.waMsg}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-white text-[11px] font-bold hover:opacity-90 active:scale-95 transition-all w-full justify-center"
@@ -428,7 +398,7 @@ function CatalogoModal({ open, onClose }: { open: boolean; onClose: () => void }
                 </span>
               </div>
               <a
-                href="https://wa.me/51993663792?text=Hola%20%F0%9F%91%8B%20gracias%20por%20escribir%20a%20MycoAndes%20%F0%9F%8D%84%0AElige%20una%20opci%C3%B3n%3A%0A1%EF%B8%8F%E2%83%A3%20Empezar%20desde%20cero%0A2%EF%B8%8F%E2%83%A3%20Producir%20a%20nivel%20negocio%0A3%EF%B8%8F%E2%83%A3%20Comprar%20insumos%0A4%EF%B8%8F%E2%83%A3%20Capacitaci%C3%B3n"
+                href="https://wa.me/51900246403?text=Hola%20%F0%9F%91%8B%20gracias%20por%20escribir%20a%20MycoAndes%20%F0%9F%8D%84%0AElige%20una%20opci%C3%B3n%3A%0A1%EF%B8%8F%E2%83%A3%20Empezar%20desde%20cero%0A2%EF%B8%8F%E2%83%A3%20Producir%20a%20nivel%20negocio%0A3%EF%B8%8F%E2%83%A3%20Comprar%20insumos%0A4%EF%B8%8F%E2%83%A3%20Capacitaci%C3%B3n"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-white text-[11px] font-semibold hover:opacity-90 transition-all flex-shrink-0"
@@ -480,8 +450,8 @@ function Navbar({ onOpenCatalogo }: { onOpenCatalogo: () => void }) {
     { label: "Inóculos", href: "#productos", isCatalogo: false },
     { label: "Extractos", href: "#extractos", isCatalogo: false },
     { label: "Pasantías", href: "#pasantias", isCatalogo: false },
-    { label: "Gestión de Granja", href: "#roi", isCatalogo: false },
-    { label: "Catálogo MycoAndes", href: "#catalogo", isCatalogo: true },
+    { label: "Mercado Peruano", href: "#roi", isCatalogo: false },
+    { label: "Kit Cultivador", href: "#catalogo", isCatalogo: true },
   ];
 
   return (
@@ -550,7 +520,7 @@ function Navbar({ onOpenCatalogo }: { onOpenCatalogo: () => void }) {
 
           {/* CTA — visible en todos los tamaños */}
           <a
-            href="https://wa.me/51993663792?text=Hola%20estoy%20interesado(a)%20en"
+            href="https://wa.me/51900246403?text=Hola%20estoy%20interesado(a)%20en"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded text-white text-[10px] sm:text-xs tracking-wider uppercase border border-white/30 hover:bg-white/10 transition-colors flex-shrink-0"
@@ -723,7 +693,7 @@ function Hero({ onOpenCatalogo }: { onOpenCatalogo: () => void }) {
                 (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,87,42,0.08)";
               }}
             >
-              Catálogo Completo 🍄
+              Kit Cultivador 🍄
             </button>
           </motion.div>
         </motion.div>
@@ -1353,7 +1323,7 @@ function ProductsSection() {
                 <div className="mt-4">
                   {/* CTA Button */}
                   <a
-                    href={`https://wa.me/51993663792?text=Hola,%20quiero%20este%20inóculo:%20${encodeURIComponent(product.name)}`}
+                    href={`https://wa.me/51900246403?text=Hola,%20quiero%20este%20inóculo:%20${encodeURIComponent(product.name)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-7 py-3 rounded-lg text-white text-sm font-semibold hover:opacity-90 active:scale-95 transition-all w-full sm:w-auto justify-center"
@@ -1586,7 +1556,7 @@ function ExtractosSection() {
                 </div>
                 {/* WhatsApp CTA */}
                 <a
-                  href={`https://wa.me/51993663792?text=Hola,%20quiero%20informacion%20sobre%20el%20extracto%20de%20${encodeURIComponent(s.name)}`}
+                  href={`https://wa.me/51900246403?text=Hola,%20quiero%20informacion%20sobre%20el%20extracto%20de%20${encodeURIComponent(s.name)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-xs font-semibold hover:opacity-90 active:scale-95 transition-all w-full justify-center"
@@ -1732,7 +1702,7 @@ function PasantiasSection() {
               <FadeIn delay={0.5} direction="right">
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <a
-                  href="https://wa.me/51993663792?text=Hola%2C%20estoy%20interesado(a)%20en%20reservar%20una%20Pasan%C3%ADa%20de%20Inmersi%C3%B3n%20en%20MycoAndes"
+                  href="https://wa.me/51900246403?text=Hola%2C%20estoy%20interesado(a)%20en%20reservar%20una%20Pasan%C3%ADa%20de%20Inmersi%C3%B3n%20en%20MycoAndes"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center px-8 py-4 rounded text-white text-sm font-bold uppercase tracking-wider hover:brightness-110 transition-all shadow-lg"
@@ -1922,7 +1892,7 @@ function ROISection() {
                   </div>
                 </div>
                 <a
-                    href="https://wa.me/51993663792?text=Hola%2C%20estoy%20interesado(a)%20en%20esta%20oportunidad%20de%20MycoAndes"
+                    href="https://wa.me/51900246403?text=Hola%2C%20estoy%20interesado(a)%20en%20esta%20oportunidad%20de%20MycoAndes"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-7 py-3 rounded-lg text-white text-sm font-semibold hover:opacity-90 active:scale-95 transition-all w-full sm:w-auto justify-center"
