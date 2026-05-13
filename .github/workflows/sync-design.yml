@@ -18,7 +18,6 @@ jobs:
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-          git checkout main
           # El comando 'checkout figma-updates -- .' trae el diseño pero NO borra .github
           git checkout figma_updates -- .
           git checkout main -- .github/workflows/ # Fuerza a mantener el deploy.yml
