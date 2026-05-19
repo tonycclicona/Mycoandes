@@ -27,7 +27,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           protocol: ftp
-          server: ftp.beardedmountaineerlodge.com
+          server: ftp.mycoandes.com
           port: 21
           username: u251936581.mycoandes
           password: ${{ secrets.FTP_PASSWORD }}
